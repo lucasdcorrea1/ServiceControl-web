@@ -31,7 +31,6 @@ const Topbar = props => {
             width="35px"
             src="/images/logos/logo--white.png"
           />
-          {process.env.REACT_APP_NAME}
         </RouterLink>
       </Toolbar>
     </AppBar>

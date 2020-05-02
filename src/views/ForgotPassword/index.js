@@ -33,6 +33,7 @@ const schema = {
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.default,
+    backgroundImage: 'url(/images/auth.jpg)',
     height: '100%'
   },
   grid: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundImage: 'url(/images/auth.jpg)',
+    backgroundImage: 'url(/images/auth.jpg)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
@@ -71,9 +72,9 @@ const useStyles = makeStyles(theme => ({
   },
   contentContainer: {},
   content: {
-    margin: '0 auto',
     height: '100%',
     display: 'flex',
+    margin: '0 auto',
     flexDirection: 'column'
   },
   contentHeader: {
@@ -262,7 +263,7 @@ const ForgotPassword = props => {
                     to="/sign-in"
                     variant="h6"
                   >
-                    Login
+                    Singn in
                   </Link>
                 </Typography>
               </form>
