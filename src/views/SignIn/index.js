@@ -12,8 +12,6 @@ import {
   Typography
 } from '@material-ui/core';
 
-import runtimeEnv from '@mars/heroku-js-runtime-env';
-
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { notify } from '../../helpers';
@@ -21,8 +19,6 @@ import { notify } from '../../helpers';
 
 import { login, logout } from '../../services/Auth';
 import api from '../../services/Api';
-
-const env = runtimeEnv();
 
 const schema = {
   email: {
@@ -260,7 +256,7 @@ const useStyles = makeStyles(theme => ({
                   className={classes.title}
                   variant="h2"
                 >
-                  Sign in {env.REACT_APP_NAME}
+                  Sign in
                 </Typography>
 
                 <Typography

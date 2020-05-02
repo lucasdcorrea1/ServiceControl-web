@@ -5,9 +5,6 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar } from '@material-ui/core';
 
-import runtimeEnv from '@mars/heroku-js-runtime-env';
-const env = runtimeEnv();
-
 const useStyles = makeStyles(() => ({
   root: {
     boxShadow: 'none',
@@ -34,8 +31,7 @@ const Topbar = props => {
             width="35px"
             src="/images/logos/logo--white.png"
           />
-          {env.REACT_APP_NAME}
-          TESTE
+          {process.env.REACT_APP_NAME}
         </RouterLink>
       </Toolbar>
     </AppBar>
