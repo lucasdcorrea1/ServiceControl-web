@@ -1,7 +1,11 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
-export default async function notify(msg, icon, type, position) {
+export default async function notify(msg, icon, type, position, autoClose) {
+  if(!autoClose){
+    autoClose = 5000
+  };
+
   let content = (
     <div style={{ display: 'flex', verticalAlign: 'middle' }}>
       {/* <Col> */}
@@ -15,7 +19,7 @@ export default async function notify(msg, icon, type, position) {
   if (type === 'error') {
     toast.error(content, {
       position: position,
-      autoClose: 5000,
+      autoClose: autoClose,
       closeOnClick: true,
       pauseOnHover: false,
       draggable: true
@@ -23,7 +27,7 @@ export default async function notify(msg, icon, type, position) {
   } else if (type === 'success') {
     toast.success(content, {
       position: position,
-      autoClose: 5000,
+      autoClose: autoClose,
       closeOnClick: true,
       pauseOnHover: false,
       draggable: true
@@ -31,7 +35,7 @@ export default async function notify(msg, icon, type, position) {
   } else if (type === 'info') {
     toast.info(content, {
       position: position,
-      autoClose: 5000,
+      autoClose: autoClose,
       closeOnClick: true,
       pauseOnHover: false,
       draggable: true
@@ -40,7 +44,7 @@ export default async function notify(msg, icon, type, position) {
   } else if (type === 'warn') {
     toast.warn(content, {
       position: position,
-      autoClose: 5000,
+      autoClose: autoClose,
       closeOnClick: true,
       pauseOnHover: false,
       draggable: true
@@ -49,7 +53,7 @@ export default async function notify(msg, icon, type, position) {
   } else if (type === 'default') {
     toast(content, {
       position: position,
-      autoClose: 5000,
+      autoClose: autoClose,
       closeOnClick: true,
       pauseOnHover: false,
       draggable: true

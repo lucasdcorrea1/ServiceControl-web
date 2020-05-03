@@ -32,8 +32,7 @@ const schema = {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.default,
-    backgroundImage: 'url(/images/auth.jpg)',
+    backgroundColor: '#F5f5f5',
     height: '100%'
   },
   grid: {
@@ -70,20 +69,30 @@ const useStyles = makeStyles(theme => ({
   bio: {
     color: theme.palette.white
   },
-  contentContainer: {},
-  content: {
+  contentContainer: {
     height: '100%',
     display: 'flex',
     margin: '0 auto',
     flexDirection: 'column'
   },
+  content: {
+    backgroundColor: '#FFF',
+    height: '90%',
+    marginTop: '25px',
+    display: 'flex',
+    margin: '0 auto',
+    flexDirection: 'column',
+    borderRadius: '4px',
+    boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
+  },
   contentHeader: {
+    margin: '0 auto',
     display: 'flex',
     alignItems: 'center',
     paddingTop: theme.spacing(5),
     paddingBototm: theme.spacing(2),
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    paddingRight: theme.spacing(2),
   },
   logoImage: {
     marginLeft: theme.spacing(4)
@@ -123,8 +132,8 @@ const useStyles = makeStyles(theme => ({
   },
   signInButton: {
     margin: theme.spacing(2, 0),
-    backgroundImage: 'linear-gradient(-90deg, #a900ff, #98009a)',
-    color: '#F5F5F5'
+    backgroundImage: 'linear-gradient(-90deg, #6F04D9, #8245BF)',
+    color: '#F5F5F5',
   }
 }));
 
@@ -133,6 +142,7 @@ const ForgotPassword = props => {
   logout();
 
   const classes = useStyles();
+  const [load, setLoad] = useState(false);
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -177,20 +187,51 @@ const ForgotPassword = props => {
   const handleSignIn = async event => {
     event.preventDefault();
     try {
+      setLoad(true);
+
       const { email } = formState.values
 
       const response = await api.post('api/v1/users/auth/forgot', {
         email,
       });
       notify(`${response.data.message}!`, '❤️', 'success', 'top-right');
-      history.push('/dashboard');
+      history.push('/sign-in');
     } catch (error) {
       notify(`${error.response.data.message}!`, '⚠️', 'error', 'top-right')
+    } finally {
+      setLoad(false)
     }
   };
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
+
+  const button = () => {
+    if (load) {
+      return (
+        <Button
+          className={classes.signInButton}
+          disabled={true}
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+        >
+          Entrar
+        </Button>)
+    }
+    return (
+      <Button
+        className={classes.signInButton}
+        disabled={!formState.isValid}
+        fullWidth
+        size="large"
+        type="submit"
+        variant="contained"
+      >
+        Entrar
+      </Button>)
+  };
 
   return (
     <div className={classes.root}>
@@ -199,16 +240,22 @@ const ForgotPassword = props => {
         container
       >
         <Grid
-          className={classes.content}
+          className={classes.contentContainer}
           item
           lg={7}
           xs={12}
         >
           <div className={classes.content}>
             <div className={classes.contentHeader}>
-              <IconButton onClick={handleBack}>
+              {/* <IconButton className={classes.contentHeader.iconButton} onClick={handleBack}>
                 <ArrowBackIcon />
-              </IconButton>
+
+              </IconButton> */}
+              <img
+                alt="Logo"
+                width="100px"
+                src="/images/logos/logo--white.png"
+              />
             </div>
             <div className={classes.contentBody}>
               <form
@@ -244,16 +291,9 @@ const ForgotPassword = props => {
                   value={formState.values.email || ''}
                   variant="outlined"
                 />
-                <Button
-                  className={classes.signInButton}
-                  disabled={!formState.isValid}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                >
-                  Enviar
-                </Button>
+                {
+                  button()
+                }
                 <Typography
                   color="textSecondary"
                   variant="body1"

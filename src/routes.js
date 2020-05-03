@@ -92,21 +92,18 @@ const Routes = () => {
         exact
         layout={MinimalLayout}
         path="/sign-in"
-        private={false}
       />
       <RouteWithLayout
         component={ForgotPassword}
         exact
         layout={MinimalLayout}
         path="/forgot-password"
-        private={false}
       />
       <RouteWithLayout
         component={NotFoundView}
         exact
         layout={MinimalLayout}
         path="/not-found"
-        private={false}
       />
       <Redirect to="/not-found" />
     </Switch>

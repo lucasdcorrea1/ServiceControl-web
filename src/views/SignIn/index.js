@@ -25,7 +25,7 @@ const schema = {
     presence: { allowEmpty: false, message: 'is required' },
     email: true,
     length: {
-      maximum: 64
+      maximum: 64,
     }
   },
   password: {
@@ -38,8 +38,7 @@ const schema = {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.default,
-    backgroundImage: 'url(/images/auth.jpg)',
+    backgroundColor: '#F5f5f5',
     height: '100%'
   },
   grid: {
@@ -76,20 +75,30 @@ const useStyles = makeStyles(theme => ({
   bio: {
     color: theme.palette.white
   },
-  contentContainer: {},
-  content: {
+  contentContainer: {
     height: '100%',
     display: 'flex',
     margin: '0 auto',
     flexDirection: 'column'
   },
+  content: {
+    backgroundColor: '#FFF',
+    height: '90%',
+    marginTop: '25px',
+    display: 'flex',
+    margin: '0 auto',
+    flexDirection: 'column',
+    borderRadius: '4px',
+    boxShadow: '0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15)',
+  },
   contentHeader: {
+    margin: '0 auto',
     display: 'flex',
     alignItems: 'center',
     paddingTop: theme.spacing(5),
     paddingBototm: theme.spacing(2),
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    paddingRight: theme.spacing(2),
   },
   logoImage: {
     marginLeft: theme.spacing(4)
@@ -129,16 +138,18 @@ const useStyles = makeStyles(theme => ({
   },
   signInButton: {
     margin: theme.spacing(2, 0),
-    backgroundImage: 'linear-gradient(-90deg, #a900ff, #98009a)',
-    color: '#F5F5F5'
+    backgroundImage: 'linear-gradient(-90deg, #6F04D9, #8245BF)',
+    color: '#F5F5F5',
   }
 }));
 
-  const SignIn = props => {
+const SignIn = props => {
   logout();
   const { history } = props;
 
   const classes = useStyles();
+
+  const [load, setLoad] = useState(false);
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -183,6 +194,8 @@ const useStyles = makeStyles(theme => ({
   const handleSignIn = async event => {
     event.preventDefault();
     try {
+      setLoad(true);
+
       const { email, password } = formState.values
 
       const response = await api.post('api/v1/users/auth', {
@@ -190,15 +203,44 @@ const useStyles = makeStyles(theme => ({
         password
       });
       login(response.data);
-      notify(`Olá ${response.data.name}!`, '❤️', 'success', 'top-right');
+      notify(`Olá ${response.data.name}!`, '❤️', 'success', 'top-right', 1500);
       history.push('/dashboard');
     } catch (error) {
-      notify('E-mail ou senha invalidos.', '⚠️', 'error', 'top-right')
+      notify('E-mail ou senha invalidos.', '⚠️', 'error', 'top-right', 2000)
+    } finally {
+      setLoad(false)
     }
   };
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
+
+  const button = () => {
+    if (load) {
+      return (
+        <Button
+          className={classes.signInButton}
+          disabled={true}
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+        >
+          Entrar
+        </Button>)
+    }
+    return (
+      <Button
+        className={classes.signInButton}
+        disabled={!formState.isValid}
+        fullWidth
+        size="large"
+        type="submit"
+        variant="contained"
+      >
+        Entrar
+      </Button>)
+  };
 
   return (
     <div className={classes.root}>
@@ -207,16 +249,22 @@ const useStyles = makeStyles(theme => ({
         container
       >
         <Grid
-          className={classes.content}
+          className={classes.contentContainer}
           item
           lg={7}
           xs={12}
         >
           <div className={classes.content}>
             <div className={classes.contentHeader}>
-              <IconButton onClick={handleBack}>
+              {/* <IconButton className={classes.contentHeader.iconButton} onClick={handleBack}>
                 <ArrowBackIcon />
-              </IconButton>
+
+              </IconButton> */}
+              <img
+                alt="Logo"
+                width="100px"
+                src="/images/logos/logo--white.png"
+              />
             </div>
             <div className={classes.contentBody}>
               <form
@@ -266,16 +314,9 @@ const useStyles = makeStyles(theme => ({
                   value={formState.values.password || ''}
                   variant="outlined"
                 />
-                <Button
-                  className={classes.signInButton}
-                  disabled={!formState.isValid}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                >
-                  Entrar
-                </Button>
+                {
+                  button()
+                }
                 <Typography
                   color="textSecondary"
                   variant="body1"
