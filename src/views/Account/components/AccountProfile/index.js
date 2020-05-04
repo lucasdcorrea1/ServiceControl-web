@@ -50,10 +50,11 @@ const AccountProfile = props => {
   useEffect(() => {
     if (!fileInput) {
       return setPreview('/images/avatars/avatar_11.png')
-      
+
     }
-    return setPreview(URL.createObjectURL(fileInput))
-    
+    return
+
+
   }, [fileInput])
 
   const handleClick = () => {
@@ -62,12 +63,16 @@ const AccountProfile = props => {
 
   const handleFileChange = e => {
     if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined)
+      // setSelectedFile(undefined)
       return
     }
+    // setSelectedFile(e.target.files[0])
+    let reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result)
+    }
+    reader.readAsDataURL(e.target.files[0])
 
-    // I've kept this example simple by using the first image instead of multiple
-    setSelectedFile(e.target.files[0])
   }
 
   const inputFile = (
