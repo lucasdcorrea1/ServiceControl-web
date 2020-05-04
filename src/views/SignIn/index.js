@@ -193,9 +193,10 @@ const SignIn = props => {
       setLoad(true);
 
       const { email, password } = formState.values
-      if(password.length<6){
-        return notify('Sua senha deve ter no minimo 6 digitos.', '😬', 'info', 'top-right', 1500)
-      }
+
+      if (password.length < 6)
+        return notify('Sua senha deve ter no mínimo 6 dígitos.', '😬', 'info', 'top-right', 1500)
+
       const response = await api.post('api/v1/users/auth', {
         email,
         password
@@ -203,11 +204,12 @@ const SignIn = props => {
       login(response.data);
       notify(`Olá ${response.data.name}!`, '😜', 'success', 'top-right', 1500);
       history.push('/dashboard');
+
     } catch (error) {
-      if(error.response.data.message === undefined){
+      if (error.response.data.message === undefined) {
         notify('E-mail ou senha inválidos', '🤷‍♀️', 'error', 'top-right', 2000)
       } else {
-        notify(`${error.response.data.message}`, '🤷‍♀️', 'error', 'top-right', 2000)
+        notify(`${error.response.data.message}`, '🤷‍♀️', 'error', 'top-right', 2500)
       }
     } finally {
       setLoad(false)
@@ -229,7 +231,8 @@ const SignIn = props => {
           variant="contained"
         >
           Entrar
-        </Button>)
+        </Button>
+      )
     }
     return (
       <Button
@@ -241,7 +244,8 @@ const SignIn = props => {
         variant="contained"
       >
         Entrar
-      </Button>)
+      </Button>
+    )
   };
 
   return (
