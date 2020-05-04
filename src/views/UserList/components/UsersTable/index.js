@@ -39,9 +39,17 @@ const useStyles = makeStyles(theme => ({
   },
   actions: {
     justifyContent: 'flex-end'
+  },
+  statusActivated: {
+    color: '#05F29B'
+  },
+  statusBlocked: {
+    color: '#BF111F'
+  },
+  statusPending: {
+    color: '#6805F2'
   }
 }));
-
 
 const UsersTable = props => {
   const { className, users, ...rest } = props;
@@ -93,6 +101,29 @@ const UsersTable = props => {
     setRowsPerPage(event.target.value);
   };
 
+  const userStatus = status => {
+    var tableCellUserStatus;
+    switch (status) {
+      case 0:
+        tableCellUserStatus = (
+          <TableCell className={classes.statusPending}>Pendente</TableCell>
+        );
+        break;
+      case 1:
+        tableCellUserStatus = (
+          <TableCell className={classes.statusActivated}>Ativo</TableCell>
+        );
+        break;
+      case 2:
+        tableCellUserStatus = (
+          <TableCell className={classes.statusBlocked}>Bloqueado</TableCell>
+        );
+        break;
+    }
+    return tableCellUserStatus;
+  };
+  const url = null;
+
   return (
     <Card
       {...rest}
@@ -117,8 +148,8 @@ const UsersTable = props => {
                   </TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>E-mail</TableCell>
-                  <TableCell>type</TableCell>
-                  <TableCell>CPF</TableCell>
+                  <TableCell>Tipo</TableCell>
+                  <TableCell>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -139,25 +170,31 @@ const UsersTable = props => {
                     </TableCell>
                     <TableCell>
                       <div className={classes.nameContainer}>
-                        <Avatar
-                          className={classes.avatar}
-                          src='/images/avatars/avatar_5.png'
-                        >
-                          {getInitials(user.name)}
-                        </Avatar>
+                        {url ? (
+                          <Avatar
+                            className={classes.avatar}
+                            src={url}
+                          >
+                            {getInitials(user.name)}
+                          </Avatar>
+                        ) : (
+                          <Avatar
+                            className={classes.avatar}
+                            src="/images/avatars/social.svg"
+                          >
+                            {getInitials(user.name)}
+                          </Avatar>
+                        )}
                         <Typography variant="body1">{user.name}</Typography>
                       </div>
                     </TableCell>
                     <TableCell>{user.email}</TableCell>
-                    {
-                      user.type === 1 ?
-                        <TableCell>Admin</TableCell>
-                        :
-                        <TableCell>Funcionario</TableCell>
-                    }
-                    <TableCell>
-                      {user.cpfCnpj}
-                    </TableCell>
+                    {user.type === 1 ? (
+                      <TableCell>Admin</TableCell>
+                    ) : (
+                      <TableCell>Funcionario</TableCell>
+                    )}
+                    {userStatus(user.status)}
                   </TableRow>
                 ))}
               </TableBody>

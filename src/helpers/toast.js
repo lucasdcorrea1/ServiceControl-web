@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 export default async function notify(msg, icon, type, position, autoClose) {
   if(!autoClose){
     autoClose = 5000
-  };
+  }
 
   let content = (
     <div style={{ display: 'flex', verticalAlign: 'middle' }}>
@@ -50,7 +50,7 @@ export default async function notify(msg, icon, type, position, autoClose) {
       draggable: true
     });
 
-  } else if (type === 'default') {
+  } else {
     toast(content, {
       position: position,
       autoClose: autoClose,
@@ -59,4 +59,4 @@ export default async function notify(msg, icon, type, position, autoClose) {
       draggable: true
     });
   }
-};
+}

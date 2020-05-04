@@ -168,10 +168,6 @@ const SignIn = props => {
     }));
   }, [formState.values]);
 
-  const handleBack = () => {
-    history.goBack();
-  };
-
   const handleChange = event => {
     event.persist();
 
@@ -197,16 +193,22 @@ const SignIn = props => {
       setLoad(true);
 
       const { email, password } = formState.values
-
+      if(password.length<6){
+        return notify('Sua senha deve ter no minimo 6 digitos.', '😬', 'info', 'top-right', 1500)
+      }
       const response = await api.post('api/v1/users/auth', {
         email,
         password
       });
       login(response.data);
-      notify(`Olá ${response.data.name}!`, '❤️', 'success', 'top-right', 1500);
+      notify(`Olá ${response.data.name}!`, '😜', 'success', 'top-right', 1500);
       history.push('/dashboard');
     } catch (error) {
-      notify('E-mail ou senha invalidos.', '⚠️', 'error', 'top-right', 2000)
+      if(error.response.data.message === undefined){
+        notify('E-mail ou senha inválidos', '🤷‍♀️', 'error', 'top-right', 2000)
+      } else {
+        notify(`${error.response.data.message}`, '🤷‍♀️', 'error', 'top-right', 2000)
+      }
     } finally {
       setLoad(false)
     }

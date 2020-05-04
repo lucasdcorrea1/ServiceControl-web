@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -31,6 +31,10 @@ const useStyles = makeStyles(theme => ({
   },
   uploadButton: {
     marginRight: theme.spacing(2)
+  },
+  uploadInput: {
+    display: 'none',
+
   }
 }));
 
@@ -39,12 +43,49 @@ const AccountProfile = props => {
 
   const classes = useStyles();
 
+  const [fileInput, setSelectedFile] = useState(useRef(undefined))
+  const [perfilImg, setPreview] = useState('/images/avatars/avatar_11.png');
+
+
+  useEffect(() => {
+    if (!fileInput) {
+      return setPreview('/images/avatars/avatar_11.png')
+      
+    }
+    return setPreview(URL.createObjectURL(fileInput))
+    
+  }, [fileInput])
+
+  const handleClick = () => {
+    fileInput.current.click()
+  }
+
+  const handleFileChange = e => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined)
+      return
+    }
+
+    // I've kept this example simple by using the first image instead of multiple
+    setSelectedFile(e.target.files[0])
+  }
+
+  const inputFile = (
+    <input
+      type='file'
+      className={classes.uploadInput}
+      onChange={(e) => handleFileChange(e)}
+      ref={fileInput}
+    />
+  )
+
+
   const user = {
     name: 'Shen Zhi',
     city: 'Los Angeles',
     country: 'USA',
     timezone: 'GTM-7',
-    avatar: '/images/avatars/avatar_11.png'
+    avatar: perfilImg
   };
 
   return (
@@ -91,16 +132,18 @@ const AccountProfile = props => {
       </CardContent>
       <Divider />
       <CardActions>
+        {inputFile}
         <Button
           className={classes.uploadButton}
           color="primary"
+          onClick={() => handleClick()}
           variant="text"
         >
-          Upload picture
+          Adicionar foto
         </Button>
-        <Button variant="text">Remove picture</Button>
+        <Button variant="text">Excluir foto</Button>
       </CardActions>
-    </Card>
+    </Card >
   );
 };
 
