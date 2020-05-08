@@ -6,18 +6,18 @@ import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Button,
-  IconButton,
+  // IconButton,
   TextField,
   Link,
   Typography
 } from '@material-ui/core';
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { notify } from '../../helpers';
 
 
-import { login, logout } from '../../services/Auth';
+import { logout } from '../../services/Auth';
 import api from '../../services/Api';
 
 const schema = {
@@ -161,9 +161,9 @@ const ForgotPassword = props => {
     }));
   }, [formState.values]);
 
-  const handleBack = () => {
-    history.goBack();
-  };
+  // const handleBack = () => {
+  //   history.goBack();
+  // };
 
   const handleChange = event => {
     event.persist();

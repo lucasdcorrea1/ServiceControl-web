@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 // import moment from 'moment';
-import { TextInputMask } from 'react-masked-text';
+// import { TextInputMask } from 'react-masked-text';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -32,7 +32,8 @@ const useStyles = makeStyles(theme => ({
   },
   nameContainer: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    textTransform: 'capitalize'
   },
   avatar: {
     marginRight: theme.spacing(2)
@@ -102,7 +103,7 @@ const UsersTable = props => {
   };
 
   const userStatus = status => {
-    var tableCellUserStatus;
+    let tableCellUserStatus;
     switch (status) {
       case 0:
         tableCellUserStatus = (
@@ -119,9 +120,36 @@ const UsersTable = props => {
           <TableCell className={classes.statusBlocked}>Bloqueado</TableCell>
         );
         break;
+      default:
+        tableCellUserStatus = (
+          <TableCell className={classes.statusBlocked}>Status Indefinido</TableCell>
+        );
     }
     return tableCellUserStatus;
   };
+
+  const userType = type => {
+    let tableCellUserType;
+    switch (type) {
+      case 1:
+        tableCellUserType = 'Super Usuário'
+        break;
+      case 2:
+        tableCellUserType = 'Admistrador'
+        break;
+      case 3:
+        tableCellUserType = 'Usuário'
+        break;
+      case 4:
+        tableCellUserType = 'Cliente'
+        break;
+      default:
+        tableCellUserType = 'Usuário'
+    }
+    return tableCellUserType;
+  };
+
+
   const url = null;
 
   return (
@@ -178,22 +206,18 @@ const UsersTable = props => {
                             {getInitials(user.name)}
                           </Avatar>
                         ) : (
-                          <Avatar
-                            className={classes.avatar}
-                            src="/images/avatars/social.svg"
-                          >
-                            {getInitials(user.name)}
-                          </Avatar>
-                        )}
+                            <Avatar
+                              className={classes.avatar}
+                              src="/images/avatars/social.svg"
+                            >
+                              {getInitials(user.name)}
+                            </Avatar>
+                          )}
                         <Typography variant="body1">{user.name}</Typography>
                       </div>
                     </TableCell>
                     <TableCell>{user.email}</TableCell>
-                    {user.type === 1 ? (
-                      <TableCell>Admin</TableCell>
-                    ) : (
-                      <TableCell>Funcionario</TableCell>
-                    )}
+                    <TableCell>{userType(user.type)}</TableCell>
                     {userStatus(user.status)}
                   </TableRow>
                 ))}

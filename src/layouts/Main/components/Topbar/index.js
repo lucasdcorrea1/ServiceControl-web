@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+
+import { useSelector, useDispatch } from 'react-redux';
+import logoutService from '../../../../services/logout.service';
+
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -23,11 +27,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Topbar = props => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   const { className, onSidebarOpen, ...rest } = props;
 
   const classes = useStyles();
 
   const [notifications] = useState([]);
+
+  function authLogoutButton() {
+    isAuthenticated && dispatch(logoutService());
+  }
 
   return (
     <AppBar
@@ -55,6 +66,7 @@ const Topbar = props => {
           </IconButton>
           <RouterLink to="/sign-in">
             <IconButton
+              onClick={authLogoutButton}
               className={classes.signOutButton}
               color="inherit"
             >

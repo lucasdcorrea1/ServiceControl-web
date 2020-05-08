@@ -43,7 +43,7 @@ const AccountProfile = props => {
 
   const classes = useStyles();
 
-  const [fileInput, setSelectedFile] = useState(useRef(undefined))
+  const [fileInput] = useState(useRef(undefined))
   const [perfilImg, setPreview] = useState('/images/avatars/avatar_11.png');
 
 

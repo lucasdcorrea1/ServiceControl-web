@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUser } from '../../../../../../store/fetchActions/users';
+
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -10,27 +13,62 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    minHeight: 'fit-content'
+    minHeight: 'fit-content',
+    textTransform: 'capitalize'
   },
   avatar: {
     width: 60,
     height: 60
   },
   name: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   }
 }));
 
 const Profile = props => {
-  const { className, ...rest } = props;
-
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const userProfile = useSelector((state) => state.userProfile);
+  
+  const { className, ...rest } = props;
+  const [user, setUser] = useState({ name: '', url: '', bio: '' });
 
-  const userName = localStorage.getItem('UserName');
-  const user = {
-    name: userName,
-    avatar: '/images/avatars/avatar_11.png',
-    bio: 'Manager'
+  useEffect(() => {
+    if (!userProfile.length) {
+      dispatch(getUser());
+    }
+
+  }, [dispatch])
+
+  useEffect(() => {
+    if (userProfile.length) {
+      const [user] = userProfile
+      setUser(user)
+    }
+
+  }, [userProfile]);
+
+  
+  const avatarPerson = () => {
+    let avatar;
+    if (user.url) {
+      avatar = (<Avatar
+        alt="Person URL"
+        className={classes.avatar}
+        component={RouterLink}
+        src={user.url}
+        to="/settings"
+      />)
+    } else {
+      avatar = (<Avatar
+        alt="Person"
+        className={classes.avatar}
+        component={RouterLink}
+        src='/images/avatars/social.svg'
+        to="/settings"
+      />)
+    }
+    return avatar;
   };
 
   return (
@@ -38,13 +76,7 @@ const Profile = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <Avatar
-        alt="Person"
-        className={classes.avatar}
-        component={RouterLink}
-        src={user.avatar}
-        to="/settings"
-      />
+      {avatarPerson()}
       <Typography
         className={classes.name}
         variant="h4"

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { makeStyles } from '@material-ui/styles';
 import { UsersToolbar, UsersTable } from './components';
 
-import api from '../../services/Api';
-import { getToken } from '../../services/Auth';
+import { getAllUsers } from '../../store/fetchActions/users';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,19 +16,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function UserList() {
-  const [users, setUsers] = useState([]);
-  const [token] = useState(getToken());
-
+  const users = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+  
   useEffect(() => {
-    api.get('api/v1/users', {
-      headers: {
-        Authorization: token
-      }
-    }).then(response => setUsers(response.data))
-  }, [token])
+    dispatch(getAllUsers());
+  }, [dispatch])
 
   const classes = useStyles();
-
+  
   return (
     <div className={classes.root}>
       <UsersToolbar />

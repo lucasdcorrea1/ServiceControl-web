@@ -15,12 +15,12 @@ import {
   SignUp as SignUpView,
   SignIn as SignInView,
   NotFound as NotFoundView,
-  ForgotPassword as ForgotPassword
+  ForgotPassword as ForgotPasswordView
 } from './views';
 
-const test = {
-  signin: true
-}
+// const test = {
+//   signin: true
+// }
 
 
 const Routes = () => {
@@ -83,7 +83,7 @@ const Routes = () => {
       <RouteWithLayout
         component={SignUpView}
         exact
-        layout={MinimalLayout}
+        layout={MainLayout}
         path="/sign-up"
         private={true}
       />
@@ -94,7 +94,7 @@ const Routes = () => {
         path="/sign-in"
       />
       <RouteWithLayout
-        component={ForgotPassword}
+        component={ForgotPasswordView}
         exact
         layout={MinimalLayout}
         path="/forgot-password"

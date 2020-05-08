@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+import { addUserFetch } from '../../store/fetchActions/users'
+
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { makeStyles } from '@material-ui/styles';
@@ -16,13 +20,13 @@ import {
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const schema = {
-  firstName: {
+  name: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
       maximum: 32
     }
   },
-  lastName: {
+  cpfCnpj: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
       maximum: 32
@@ -142,7 +146,7 @@ const useStyles = makeStyles(theme => ({
 
 const SignUp = props => {
   const { history } = props;
-
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const [formState, setFormState] = useState({
@@ -154,6 +158,7 @@ const SignUp = props => {
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
+
 
     setFormState(formState => ({
       ...formState,
@@ -187,7 +192,17 @@ const SignUp = props => {
 
   const handleSignUp = event => {
     event.preventDefault();
-    history.push('/');
+    const { name, email, cpfCnpj, password } = formState.values
+    const data = {
+      name,
+      email,
+      cpfCnpj,
+      password,
+      typePerson: 1,
+      type: 2
+    }
+    dispatch(addUserFetch(data))
+
   };
 
   const hasError = field =>
@@ -199,37 +214,6 @@ const SignUp = props => {
         className={classes.grid}
         container
       >
-        <Grid
-          className={classes.quoteContainer}
-          item
-          lg={5}
-        >
-          <div className={classes.quote}>
-            <div className={classes.quoteInner}>
-              <Typography
-                className={classes.quoteText}
-                variant="h1"
-              >
-                Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
-                they sold out High Life.
-              </Typography>
-              <div className={classes.person}>
-                <Typography
-                  className={classes.name}
-                  variant="body1"
-                >
-                  Takamaru Ayako
-                </Typography>
-                <Typography
-                  className={classes.bio}
-                  variant="body2"
-                >
-                  Manager at inVision
-                </Typography>
-              </div>
-            </div>
-          </div>
-        </Grid>
         <Grid
           className={classes.content}
           item
@@ -261,32 +245,19 @@ const SignUp = props => {
                 </Typography>
                 <TextField
                   className={classes.textField}
-                  error={hasError('firstName')}
+                  error={hasError('name')}
                   fullWidth
                   helperText={
-                    hasError('firstName') ? formState.errors.firstName[0] : null
+                    hasError('name') ? formState.errors.name[0] : null
                   }
-                  label="First name"
-                  name="firstName"
+                  label="name"
+                  name="name"
                   onChange={handleChange}
                   type="text"
-                  value={formState.values.firstName || ''}
+                  value={formState.values.name || ''}
                   variant="outlined"
                 />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('lastName')}
-                  fullWidth
-                  helperText={
-                    hasError('lastName') ? formState.errors.lastName[0] : null
-                  }
-                  label="Last name"
-                  name="lastName"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.lastName || ''}
-                  variant="outlined"
-                />
+
                 <TextField
                   className={classes.textField}
                   error={hasError('email')}
@@ -299,6 +270,20 @@ const SignUp = props => {
                   onChange={handleChange}
                   type="text"
                   value={formState.values.email || ''}
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
+                  error={hasError('cpfCnpj')}
+                  fullWidth
+                  helperText={
+                    hasError('cpfCnpj') ? formState.errors.cpfCnpj[0] : null
+                  }
+                  label="cpfCnpj"
+                  name="cpfCnpj"
+                  onChange={handleChange}
+                  type="text"
+                  value={formState.values.cpfCnpj || ''}
                   variant="outlined"
                 />
                 <TextField

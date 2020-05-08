@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { getUsersFilterStatus } from '../../store/fetchActions/users';
+
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
@@ -9,9 +13,10 @@ import {
   TotalProfit,
   LatestSales,
   UsersByDevice,
-  LatestProducts,
   LatestOrders
 } from './components';
+
+import { Users } from '../../components'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,7 +25,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Dashboard = () => {
+  const users = useSelector((state) => state.users);
   const classes = useStyles();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUsersFilterStatus(0));
+  }, [dispatch]);
+
 
   return (
     <div className={classes.root}>
@@ -89,7 +101,7 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          <LatestProducts />
+          <Users users={users} />
         </Grid>
         <Grid
           item

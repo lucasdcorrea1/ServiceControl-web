@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+
+import { authLogin } from '../../store/fetchActions/auth';
+import { useDispatch } from 'react-redux';
+
+// import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Button,
-  IconButton,
+  // IconButton,
   TextField,
   Link,
   Typography
 } from '@material-ui/core';
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import { notify } from '../../helpers';
 
 
-import { login, logout } from '../../services/Auth';
-import api from '../../services/Api';
+import { logout } from '../../services/Auth';
 
 const schema = {
   email: {
@@ -144,13 +147,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignIn = props => {
+  const dispatch = useDispatch();
   logout();
-  const { history } = props;
+  // const { history } = props;
 
   const classes = useStyles();
 
-  const [load, setLoad] = useState(false);
-
+  // const [load, setLoad] = useState(false);
+  const [load] = useState(false);
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},
@@ -187,34 +191,44 @@ const SignIn = props => {
     }));
   };
 
-  const handleSignIn = async event => {
+  const submitForm = event => {
     event.preventDefault();
-    try {
-      setLoad(true);
+    const { email, password } = formState.values;
 
-      const { email, password } = formState.values
+    if (password.length < 6)
+        return notify('Sua senha deve ter no mínimo 6 dígitos.', '😬', 'info', 'top-right', 1500);
 
-      if (password.length < 6)
-        return notify('Sua senha deve ter no mínimo 6 dígitos.', '😬', 'info', 'top-right', 1500)
+    dispatch(authLogin({ email, password }));
+  }
 
-      const response = await api.post('api/v1/users/auth', {
-        email,
-        password
-      });
-      login(response.data);
-      notify(`Olá ${response.data.name}!`, '😜', 'success', 'top-right', 1500);
-      history.push('/dashboard');
+  // const handleSignIn = async event => {
+  //   event.preventDefault();
+  //   try {
+  //     setLoad(true);
 
-    } catch (error) {
-      if (error.response.data.message === undefined) {
-        notify('E-mail ou senha inválidos', '🤷‍♀️', 'error', 'top-right', 2000)
-      } else {
-        notify(`${error.response.data.message}`, '🤷‍♀️', 'error', 'top-right', 2500)
-      }
-    } finally {
-      setLoad(false)
-    }
-  };
+  //     const { email, password } = formState.values
+
+  //     if (password.length < 6)
+  //       return notify('Sua senha deve ter no mínimo 6 dígitos.', '😬', 'info', 'top-right', 1500)
+
+  //     const response = await api.post('api/v1/users/auth', {
+  //       email,
+  //       password
+  //     });
+  //     login(response.data);
+  //     notify(`Olá ${response.data.name}!`, '😜', 'success', 'top-right', 1500);
+  //     history.push('/dashboard');
+
+  //   } catch (error) {
+  //     if (error.response.data.message === undefined) {
+  //       notify('E-mail ou senha inválidos', '🤷‍♀️', 'error', 'top-right', 2000)
+  //     } else {
+  //       notify(`${error.response.data.message}`, '🤷‍♀️', 'error', 'top-right', 2500)
+  //     }
+  //   } finally {
+  //     setLoad(false)
+  //   }
+  // };
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -275,7 +289,7 @@ const SignIn = props => {
             <div className={classes.contentBody}>
               <form
                 className={classes.form}
-                onSubmit={handleSignIn}
+                onSubmit={submitForm}
               >
                 <Typography
                   className={classes.title}
@@ -344,8 +358,8 @@ const SignIn = props => {
   );
 };
 
-SignIn.propTypes = {
-  history: PropTypes.object
-};
+// SignIn.propTypes = {
+//   history: PropTypes.object
+// };
 
 export default withRouter(SignIn);
