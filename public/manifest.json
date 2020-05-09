@@ -3,9 +3,19 @@
   "name": "Service Control",
   "icons": [
     {
-      "src": "logo--white.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "icon16x.ico",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "icon48x.ico",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "icon256x.ico",
+      "type": "image/png",
+      "sizes": "256x256"
     }
   ],
   "start_url": ".",
