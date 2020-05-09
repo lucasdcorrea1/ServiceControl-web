@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { getUser } from '../../store/fetchActions/users';
+
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
@@ -13,6 +17,24 @@ const useStyles = makeStyles(theme => ({
 const Account = () => {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+  const userProfile = useSelector((state) => state.userProfile);
+
+  const [user, setUser] = useState({ name: '', url: '', bio: '' });
+
+  useEffect(() => {
+    if (!userProfile.length) {
+      dispatch(getUser());
+    }
+  }, [dispatch])
+
+  useEffect(() => {
+    if (userProfile.length) {
+      const [user] = userProfile
+      setUser(user)
+    }
+  }, [userProfile]);
+
   return (
     <div className={classes.root}>
       <Grid
@@ -26,7 +48,7 @@ const Account = () => {
           xl={4}
           xs={12}
         >
-          <AccountProfile />
+          <AccountProfile user={user} />
         </Grid>
         <Grid
           item
@@ -35,7 +57,7 @@ const Account = () => {
           xl={8}
           xs={12}
         >
-          <AccountDetails />
+          <AccountDetails user={user} />
         </Grid>
       </Grid>
     </div>

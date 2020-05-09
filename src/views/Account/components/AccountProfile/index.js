@@ -17,7 +17,8 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {},
   details: {
-    display: 'flex'
+    display: 'flex',
+    textTransform: 'capitalize'
   },
   avatar: {
     marginLeft: 'auto',
@@ -39,23 +40,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AccountProfile = props => {
-  const { className, ...rest } = props;
+  const { className, user, ...rest } = props;
 
   const classes = useStyles();
 
   const [fileInput] = useState(useRef(undefined))
-  const [perfilImg, setPreview] = useState('/images/avatars/avatar_11.png');
-
+  const [perfilImg, setPreview] = useState('/images/avatars/social.svg');
 
   useEffect(() => {
-    if (!fileInput) {
-      return setPreview('/images/avatars/avatar_11.png')
-
-    }
-    return
-
-
-  }, [fileInput])
+    if (user.url)
+      return setPreview(user.url)
+  }, [user])
 
   const handleClick = () => {
     fileInput.current.click()
@@ -63,16 +58,14 @@ const AccountProfile = props => {
 
   const handleFileChange = e => {
     if (!e.target.files || e.target.files.length === 0) {
-      // setSelectedFile(undefined)
       return
     }
-    // setSelectedFile(e.target.files[0])
+
     let reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
     reader.onloadend = () => {
       setPreview(reader.result)
-    }
-    reader.readAsDataURL(e.target.files[0])
-
+    };
   }
 
   const inputFile = (
@@ -83,15 +76,6 @@ const AccountProfile = props => {
       ref={fileInput}
     />
   )
-
-
-  const user = {
-    name: 'Shen Zhi',
-    city: 'Los Angeles',
-    country: 'USA',
-    timezone: 'GTM-7',
-    avatar: perfilImg
-  };
 
   return (
     <Card
@@ -105,32 +89,32 @@ const AccountProfile = props => {
               gutterBottom
               variant="h2"
             >
-              John Doe
+              {user.name}
             </Typography>
             <Typography
               className={classes.locationText}
               color="textSecondary"
               variant="body1"
             >
-              {user.city}, {user.country}
+              {user.email}
             </Typography>
             <Typography
               className={classes.dateText}
               color="textSecondary"
               variant="body1"
             >
-              {moment().format('hh:mm A')} ({user.timezone})
+              {user.bio}
             </Typography>
           </div>
           <Avatar
             className={classes.avatar}
-            src={user.avatar}
+            src={perfilImg}
           />
         </div>
         <div className={classes.progress}>
-          <Typography variant="body1">Profile Completeness: 70%</Typography>
+          <Typography variant="body1">Pefil 70% completo</Typography>
           <LinearProgress
-            value={70}
+            value={66}
             variant="determinate"
           />
         </div>
@@ -146,7 +130,6 @@ const AccountProfile = props => {
         >
           Adicionar foto
         </Button>
-        <Button variant="text">Excluir foto</Button>
       </CardActions>
     </Card >
   );

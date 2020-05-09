@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -18,18 +18,32 @@ const useStyles = makeStyles(() => ({
 }));
 
 const AccountDetails = props => {
-  const { className, ...rest } = props;
+  const { className, user, ...rest } = props;
 
   const classes = useStyles();
 
   const [values, setValues] = useState({
-    firstName: 'Shen',
-    lastName: 'Zhi',
-    email: 'shen.zhi@devias.io',
+    name: '',
+    bio: '',
+    email: '',
     phone: '',
-    state: 'Alabama',
-    country: 'USA'
+    state: '',
+    country: ''
   });
+
+
+  useEffect(() => {
+    if (user.url)
+      return setValues({
+        name: user.name,
+        bio: user.bio,
+        email: user.email,
+        phone: '',
+        state: '',
+        country: ''
+      }
+      )
+  }, [user])
 
   const handleChange = event => {
     setValues({
@@ -79,13 +93,13 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                helperText="Please specify the first name"
-                label="First name"
+                helperText="Por favor informe seu nome"
+                label="Nome"
                 margin="dense"
-                name="firstName"
+                name="name"
                 onChange={handleChange}
                 required
-                value={values.firstName}
+                value={values.name}
                 variant="outlined"
               />
             </Grid>
@@ -96,12 +110,12 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                label="Last name"
+                label="Biografia"
                 margin="dense"
                 name="lastName"
                 onChange={handleChange}
                 required
-                value={values.lastName}
+                value={values.bio}
                 variant="outlined"
               />
             </Grid>
@@ -144,7 +158,7 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                label="Select State"
+                // label="Select State"
                 margin="dense"
                 name="state"
                 onChange={handleChange}

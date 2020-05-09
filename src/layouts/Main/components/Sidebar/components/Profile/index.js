@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
 import { getUser } from '../../../../../../store/fetchActions/users';
 
 import { Link as RouterLink } from 'react-router-dom';
